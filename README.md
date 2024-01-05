@@ -1,6 +1,6 @@
 # MidSider
 
-## A simple __mid-side__ and __left or right-to-mono__ audio monitoring plugin
+## A simple __mid-side__ and __left/right-to-mono__ audio monitoring plugin
 
 ![Screenshot of MidSider plugin, showing its 5 buttons on top and the bypass toggle at the bottom left](MidSider.png)
 
