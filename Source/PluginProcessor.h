@@ -63,7 +63,7 @@ public:
 
 private:
 
-    int stereoMidSideIndex = 2;
+    int stereoMidSideIndex = 0;
     bool bypassPlugin = false;
 
     //==============================================================================
