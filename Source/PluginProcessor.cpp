@@ -160,36 +160,41 @@ void MidSiderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     auto* leftChannel = buffer.getWritePointer(0);
     auto* rightChannel = buffer.getWritePointer(1);
 
-    for (int sample = 0; sample < buffer.getNumSamples(); ++ sample)
-    {
-        if (stereoMidSideIndex == 0) // Stereo
+    if (!bypassPlugin) {
+        for (int sample = 0; sample < buffer.getNumSamples(); ++ sample)
         {
-            // Do nothing
+            if (stereoMidSideIndex == 0) // Stereo
+            {
+                // Do nothing
+            }
+            else if (stereoMidSideIndex == 1) // Mid
+            {
+                float midChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
+                leftChannel[sample] = midChannel;
+                rightChannel[sample] = midChannel;
+            }
+            else if (stereoMidSideIndex == 2) // Side
+            {
+                float sideChannel = (leftChannel[sample] - rightChannel[sample]) / 2;
+                leftChannel[sample] = sideChannel;
+                rightChannel[sample] = -sideChannel;
+            }
+            else if (stereoMidSideIndex == 3) // Left to Mono
+            {
+                float monoChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
+                leftChannel[sample] = monoChannel;
+                rightChannel[sample] = monoChannel;
+            }
+            else if (stereoMidSideIndex == 4) // Right to Mono
+            {
+                float monoChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
+                leftChannel[sample] = monoChannel;
+                rightChannel[sample] = monoChannel;
+            }
         }
-        else if (stereoMidSideIndex == 1) // Mid
-        {
-            float midChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
-            leftChannel[sample] = midChannel;
-            rightChannel[sample] = midChannel;
-        }
-        else if (stereoMidSideIndex == 2) // Side
-        {
-            float sideChannel = (leftChannel[sample] - rightChannel[sample]) / 2;
-            leftChannel[sample] = sideChannel;
-            rightChannel[sample] = -sideChannel;
-        }
-        else if (stereoMidSideIndex == 3) // Left to Mono
-        {
-            float monoChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
-            leftChannel[sample] = monoChannel;
-            rightChannel[sample] = monoChannel;
-        }
-        else if (stereoMidSideIndex == 4) // Right to Mono
-        {
-            float monoChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
-            leftChannel[sample] = monoChannel;
-            rightChannel[sample] = monoChannel;
-        }
+    }
+    else {
+        // Do nothing
     }
 
 }

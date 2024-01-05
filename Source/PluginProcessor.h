@@ -58,9 +58,13 @@ public:
     int getStereoMidSideIndex() { return stereoMidSideIndex; }
     void setStereoMidSideIndex(int index) { stereoMidSideIndex = index; }
 
+    bool getBypassPlugin() { return bypassPlugin; }
+    void setBypassPlugin(bool bypass) { bypassPlugin = bypass; }
+
 private:
 
-    int stereoMidSideIndex = 0;
+    int stereoMidSideIndex = 2;
+    bool bypassPlugin = false;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidSiderAudioProcessor)
