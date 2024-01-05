@@ -53,7 +53,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //==============================================================================
+
+    int getStereoMidSideIndex() { return stereoMidSideIndex; }
+    void setStereoMidSideIndex(int index) { stereoMidSideIndex = index; }
+
 private:
+
+    int stereoMidSideIndex = 0;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidSiderAudioProcessor)
 };
