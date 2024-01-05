@@ -1,11 +1,3 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
@@ -14,7 +6,8 @@
 //==============================================================================
 /**
 */
-class MidSiderAudioProcessorEditor  : public juce::AudioProcessorEditor
+class MidSiderAudioProcessorEditor  : public juce::AudioProcessorEditor,
+                                      private juce::Timer
 {
 public:
     MidSiderAudioProcessorEditor (MidSiderAudioProcessor&);
@@ -65,6 +58,11 @@ public:
       left2Mono.setToggleState(false, juce::dontSendNotification);
       right2Mono.setToggleState(true, juce::dontSendNotification);
     };
+    }
+
+    void timerCallback() override
+    {
+      repaint();
     }
 
 private:
