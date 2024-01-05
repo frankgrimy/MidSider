@@ -1,11 +1,3 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
@@ -13,7 +5,8 @@
 //==============================================================================
 /**
 */
-class MidSiderAudioProcessor  : public juce::AudioProcessor
+class MidSiderAudioProcessor  : public juce::AudioProcessor,
+                                public juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -61,10 +54,14 @@ public:
     bool getBypassPlugin() { return bypassPlugin; }
     void setBypassPlugin(bool bypass) { bypassPlugin = bypass; }
 
-private:
+    juce::AudioProcessorValueTreeState apvts;
 
+private:
     int stereoMidSideIndex = 0;
     bool bypassPlugin = false;
+
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    void parameterChanged(const juce::String& parameterID, float newValue) override;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidSiderAudioProcessor)

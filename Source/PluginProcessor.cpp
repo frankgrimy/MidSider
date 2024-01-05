@@ -1,11 +1,3 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -19,14 +11,53 @@ MidSiderAudioProcessor::MidSiderAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+                       apvts(*this, nullptr, "Parameters", createParameterLayout())
 #endif
 {
+    apvts.addParameterListener("bypass", this);
+    apvts.addParameterListener("stereoMidSide", this);
+}
+
+// Parameter Layout
+
+juce::AudioProcessorValueTreeState::ParameterLayout MidSiderAudioProcessor::createParameterLayout()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+
+    // Stereo, Mid, Side, Left to Mono, Right to Mono
+    
+    //params.reserve(2);
+
+    auto pBypass = std::make_unique<juce::AudioParameterBool>("bypass", "Bypass", false);
+    auto pStereoMidSide = std::make_unique<juce::AudioParameterChoice>("stereoMidSide", "Listening mode", juce::StringArray("Stereo", "Mid", "Side", "Left to Mono", "Right to Mono"), 0);
+
+    params.push_back(std::move(pBypass));
+    params.push_back(std::move(pStereoMidSide));
+
+    return { params.begin(), params.end() };
+
+}
+
+void MidSiderAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
+{
+    if (parameterID == "stereoMidSide")
+    {
+        stereoMidSideIndex = newValue;
+    }
+    else if (parameterID == "bypass")
+    {
+        bypassPlugin = newValue;
+    }
 }
 
 MidSiderAudioProcessor::~MidSiderAudioProcessor()
 {
+    apvts.removeParameterListener("bypass", this);
+    apvts.removeParameterListener("stereoMidSide", this);
 }
+
+//==============================================================================
 
 //==============================================================================
 const juce::String MidSiderAudioProcessor::getName() const
@@ -95,6 +126,8 @@ void MidSiderAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    stereoMidSideIndex = *apvts.getRawParameterValue("stereoMidSide");
+    bypassPlugin = *apvts.getRawParameterValue("bypass");
 }
 
 void MidSiderAudioProcessor::releaseResources()
@@ -159,7 +192,7 @@ void MidSiderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 
     auto* leftChannel = buffer.getWritePointer(0);
     auto* rightChannel = buffer.getWritePointer(1);
-
+    
     if (!bypassPlugin) {
         for (int sample = 0; sample < buffer.getNumSamples(); ++ sample)
         {
@@ -196,7 +229,6 @@ void MidSiderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     else {
         // Do nothing
     }
-
 }
 
 //==============================================================================
@@ -208,6 +240,7 @@ bool MidSiderAudioProcessor::hasEditor() const
 juce::AudioProcessorEditor* MidSiderAudioProcessor::createEditor()
 {
     return new MidSiderAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -216,12 +249,21 @@ void MidSiderAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    juce::MemoryOutputStream stream(destData, false);
+    apvts.state.writeToStream(stream);
 }
 
 void MidSiderAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
+    if (tree.isValid())
+    {
+        apvts.state = tree;
+        stereoMidSideIndex = *apvts.getRawParameterValue("stereoMidSide");
+        bypassPlugin = *apvts.getRawParameterValue("bypass");
+    }
 }
 
 //==============================================================================
