@@ -73,6 +73,10 @@ private:
     MidSiderAudioProcessor& audioProcessor;
 
     juce::TextButton stereo, mid, side, left2Mono, right2Mono;
+    //juce::Label stereoLabel, midLabel, sideLabel, left2MonoLabel, right2MonoLabel;
+
+    juce::ToggleButton bypassToggle;
+    juce::Label bypassLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidSiderAudioProcessorEditor)
 };
