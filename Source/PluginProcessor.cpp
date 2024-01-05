@@ -141,6 +141,7 @@ void MidSiderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
@@ -150,12 +151,47 @@ void MidSiderAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    /* for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
+        
+    } */
 
-        // ..do something to the data...
+    auto* leftChannel = buffer.getWritePointer(0);
+    auto* rightChannel = buffer.getWritePointer(1);
+
+    for (int sample = 0; sample < buffer.getNumSamples(); ++ sample)
+    {
+        if (stereoMidSideIndex == 0) // Stereo
+        {
+            // Do nothing
+        }
+        else if (stereoMidSideIndex == 1) // Mid
+        {
+            float midChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
+            leftChannel[sample] = midChannel;
+            rightChannel[sample] = midChannel;
+        }
+        else if (stereoMidSideIndex == 2) // Side
+        {
+            float sideChannel = (leftChannel[sample] - rightChannel[sample]) / 2;
+            leftChannel[sample] = sideChannel;
+            rightChannel[sample] = -sideChannel;
+        }
+        else if (stereoMidSideIndex == 3) // Left to Mono
+        {
+            float monoChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
+            leftChannel[sample] = monoChannel;
+            rightChannel[sample] = monoChannel;
+        }
+        else if (stereoMidSideIndex == 4) // Right to Mono
+        {
+            float monoChannel = (leftChannel[sample] + rightChannel[sample]) / 2;
+            leftChannel[sample] = monoChannel;
+            rightChannel[sample] = monoChannel;
+        }
     }
+
 }
 
 //==============================================================================
