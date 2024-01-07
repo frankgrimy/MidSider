@@ -1,3 +1,5 @@
 Builds
 JuceLibraryCode
 .vscode
+copyvst.ps1
+copydebugvst.ps1
