@@ -32,28 +32,28 @@ MidSiderAudioProcessorEditor::MidSiderAudioProcessorEditor (MidSiderAudioProcess
     addAndMakeVisible(&mid);
     mid.setButtonText("Mid");
     mid.onClick = [this]() {
-      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.2);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.25);
       //midPaint();
       };
 
     addAndMakeVisible(&side);
     side.setButtonText("Side");
     side.onClick = [this]() {
-      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.4);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.50);
       //sidePaint();
       };
 
     addAndMakeVisible(&left2Mono);
     left2Mono.setButtonText("L->Mono");
     left2Mono.onClick = [this]() {
-      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.65);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.75);
       //left2MonoPaint();
       };
 
     addAndMakeVisible(&right2Mono);
     right2Mono.setButtonText("R->Mono");
     right2Mono.onClick = [this]() {
-      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.9);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(1);
       //right2MonoPaint();
       };
 
