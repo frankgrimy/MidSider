@@ -1,5 +1,8 @@
-#include "PluginProcessor.h"
-#include "PluginEditor.h"
+//#include "PluginProcessor.h"
+//#include "PluginEditor.h"
+
+#include "MidSider/PluginProcessor.h"
+#include "MidSider/PluginEditor.h"
 
 //==============================================================================
 MidSiderAudioProcessor::MidSiderAudioProcessor()
