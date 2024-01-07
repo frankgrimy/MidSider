@@ -29,11 +29,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout MidSiderAudioProcessor::crea
     
     //params.reserve(2);
 
-    auto pBypass = std::make_unique<juce::AudioParameterBool>("bypass", "Bypass", false);
     auto pStereoMidSide = std::make_unique<juce::AudioParameterChoice>("stereoMidSide", "Listening mode", juce::StringArray("Stereo", "Mid", "Side", "Left to Mono", "Right to Mono"), 0);
+    auto pBypass = std::make_unique<juce::AudioParameterBool>("bypass", "Bypass", false);
 
-    params.push_back(std::move(pBypass));
     params.push_back(std::move(pStereoMidSide));
+    params.push_back(std::move(pBypass));
 
     return { params.begin(), params.end() };
 
