@@ -32,21 +32,21 @@ MidSiderAudioProcessorEditor::MidSiderAudioProcessorEditor (MidSiderAudioProcess
     addAndMakeVisible(&mid);
     mid.setButtonText("Mid");
     mid.onClick = [this]() {
-      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.20);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.25);
       //midPaint();
       };
 
     addAndMakeVisible(&side);
     side.setButtonText("Side");
     side.onClick = [this]() {
-      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.59);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.50);
       //sidePaint();
       };
 
     addAndMakeVisible(&left2Mono);
     left2Mono.setButtonText("L->Mono");
     left2Mono.onClick = [this]() {
-      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.79);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.75);
       //left2MonoPaint();
       };
 
