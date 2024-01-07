@@ -19,42 +19,42 @@ MidSiderAudioProcessorEditor::MidSiderAudioProcessorEditor (MidSiderAudioProcess
     setResizable(true, true);
     getConstrainer()->setFixedAspectRatio(2.941176470588235);
     setResizeLimits(250, 85, 750, 255);
-    //startTimerHz(5);
+    startTimerHz(10);
 
     //midSideStereoButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "midSideStereo", stereo);
     addAndMakeVisible(&stereo);
     stereo.setButtonText("Stereo");
     stereo.onClick = [this]() {
       audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.0);
-      stereoPaint();
+      //stereoPaint();
       };
 
     addAndMakeVisible(&mid);
     mid.setButtonText("Mid");
     mid.onClick = [this]() {
       audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.20);
-      midPaint();
+      //midPaint();
       };
 
     addAndMakeVisible(&side);
     side.setButtonText("Side");
     side.onClick = [this]() {
       audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.59);
-      sidePaint();
+      //sidePaint();
       };
 
     addAndMakeVisible(&left2Mono);
     left2Mono.setButtonText("L->Mono");
     left2Mono.onClick = [this]() {
       audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.79);
-      left2MonoPaint();
+      //left2MonoPaint();
       };
 
     addAndMakeVisible(&right2Mono);
     right2Mono.setButtonText("R->Mono");
     right2Mono.onClick = [this]() {
       audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(1);
-      right2MonoPaint();
+      //right2MonoPaint();
       };
 
     addAndMakeVisible(&bypassToggle);
@@ -116,4 +116,24 @@ void MidSiderAudioProcessorEditor::resized()
     bypassLabel.setSize(windowX * 0.24, 30);
     bypassLabel.setTopLeftPosition(20, windowY - 30);
 
+}
+
+void MidSiderAudioProcessorEditor::timerCallback() {
+
+  //DBG(audioProcessor.apvts.getParameter("stereoMidSide")->getValue());
+  if (audioProcessor.getStereoMidSideIndex() == 0) {
+      stereoPaint();
+  }
+  else if (audioProcessor.getStereoMidSideIndex() == 1) {
+      midPaint();
+  }
+  else if (audioProcessor.getStereoMidSideIndex() == 2) {
+      sidePaint();
+  }
+  else if (audioProcessor.getStereoMidSideIndex() == 3) {
+      left2MonoPaint();
+  }
+  else if (audioProcessor.getStereoMidSideIndex() == 4) {
+      right2MonoPaint();
+  }
 }

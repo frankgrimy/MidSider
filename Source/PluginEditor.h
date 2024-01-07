@@ -6,8 +6,8 @@
 //==============================================================================
 /**
 */
-class MidSiderAudioProcessorEditor  : public juce::AudioProcessorEditor/* ,
-                                      private juce::Timer */
+class MidSiderAudioProcessorEditor  : public juce::AudioProcessorEditor,
+                                      private juce::Timer
 {
 public:
     MidSiderAudioProcessorEditor (MidSiderAudioProcessor&);
@@ -57,9 +57,7 @@ public:
         right2Mono.setToggleState(true, juce::dontSendNotification);
     }
 
-    /* void timerCallback() final {
-        DBG(audioProcessor.apvts.getParameter("stereoMidSide")->getValue());
-    } */
+    void timerCallback() final;
 
 
 private:
