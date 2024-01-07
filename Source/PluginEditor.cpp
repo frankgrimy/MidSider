@@ -19,42 +19,46 @@ MidSiderAudioProcessorEditor::MidSiderAudioProcessorEditor (MidSiderAudioProcess
     setResizable(true, true);
     getConstrainer()->setFixedAspectRatio(2.941176470588235);
     setResizeLimits(250, 85, 750, 255);
-    startTimerHz(5);
+    //startTimerHz(5);
 
+    //midSideStereoButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "midSideStereo", stereo);
     addAndMakeVisible(&stereo);
     stereo.setButtonText("Stereo");
     stereo.onClick = [this]() {
-      audioProcessor.setStereoMidSideIndex(0);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.0);
+      stereoPaint();
       };
 
     addAndMakeVisible(&mid);
     mid.setButtonText("Mid");
     mid.onClick = [this]() {
-      audioProcessor.setStereoMidSideIndex(1);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.20);
+      midPaint();
       };
 
     addAndMakeVisible(&side);
     side.setButtonText("Side");
     side.onClick = [this]() {
-      audioProcessor.setStereoMidSideIndex(2);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.59);
+      sidePaint();
       };
 
     addAndMakeVisible(&left2Mono);
     left2Mono.setButtonText("L->Mono");
     left2Mono.onClick = [this]() {
-      audioProcessor.setStereoMidSideIndex(3);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(0.79);
+      left2MonoPaint();
       };
 
     addAndMakeVisible(&right2Mono);
     right2Mono.setButtonText("R->Mono");
     right2Mono.onClick = [this]() {
-      audioProcessor.setStereoMidSideIndex(4);
+      audioProcessor.apvts.getParameter("stereoMidSide")->setValueNotifyingHost(1);
+      right2MonoPaint();
       };
 
     addAndMakeVisible(&bypassToggle);
-    bypassToggle.onClick = [this]() {
-      audioProcessor.setBypassPlugin(bypassToggle.getToggleState());
-      };
+    bypassToggleAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "bypass", bypassToggle);
     addAndMakeVisible(&bypassLabel);
     bypassLabel.setText("Bypass", juce::dontSendNotification);
 
@@ -76,8 +80,7 @@ void MidSiderAudioProcessorEditor::paint (juce::Graphics& g)
     //g.setFont (15.0f);
     g.setFont(juce::Font("Calibri", getWidth() * 0.048f, juce::Font::bold));
     g.drawFittedText ("MidSider\nby Frank Grimy", getLocalBounds(), juce::Justification::centredBottom, 1);
-
-    buttonPaint();
+    //buttonPaint();
 
 }
 
