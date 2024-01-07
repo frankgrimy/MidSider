@@ -6,8 +6,8 @@
 //==============================================================================
 /**
 */
-class MidSiderAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                      private juce::Timer
+class MidSiderAudioProcessorEditor  : public juce::AudioProcessorEditor/* ,
+                                      private juce::Timer */
 {
 public:
     MidSiderAudioProcessorEditor (MidSiderAudioProcessor&);
@@ -17,53 +17,50 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
-    void buttonPaint(){
-    if (audioProcessor.getStereoMidSideIndex() == 0)
-    {
-      stereo.setToggleState(true, juce::dontSendNotification);
-      mid.setToggleState(false, juce::dontSendNotification);
-      side.setToggleState(false, juce::dontSendNotification);
-      left2Mono.setToggleState(false, juce::dontSendNotification);
-      right2Mono.setToggleState(false, juce::dontSendNotification);
-    }
-    else if (audioProcessor.getStereoMidSideIndex() == 1)
-    {
-      stereo.setToggleState(false, juce::dontSendNotification);
-      mid.setToggleState(true, juce::dontSendNotification);
-      side.setToggleState(false, juce::dontSendNotification);
-      left2Mono.setToggleState(false, juce::dontSendNotification);
-      right2Mono.setToggleState(false, juce::dontSendNotification);
-    }
-    else if (audioProcessor.getStereoMidSideIndex() == 2)
-    {
-      stereo.setToggleState(false, juce::dontSendNotification);
-      mid.setToggleState(false, juce::dontSendNotification);
-      side.setToggleState(true, juce::dontSendNotification);
-      left2Mono.setToggleState(false, juce::dontSendNotification);
-      right2Mono.setToggleState(false, juce::dontSendNotification);
-    }
-    else if (audioProcessor.getStereoMidSideIndex() == 3)
-    {
-      stereo.setToggleState(false, juce::dontSendNotification);
-      mid.setToggleState(false, juce::dontSendNotification);
-      side.setToggleState(false, juce::dontSendNotification);
-      left2Mono.setToggleState(true, juce::dontSendNotification);
-      right2Mono.setToggleState(false, juce::dontSendNotification);
-    }
-    else if (audioProcessor.getStereoMidSideIndex() == 4)
-    {
-      stereo.setToggleState(false, juce::dontSendNotification);
-      mid.setToggleState(false, juce::dontSendNotification);
-      side.setToggleState(false, juce::dontSendNotification);
-      left2Mono.setToggleState(false, juce::dontSendNotification);
-      right2Mono.setToggleState(true, juce::dontSendNotification);
-    };
+    void stereoPaint(){
+        stereo.setToggleState(true, juce::dontSendNotification);
+        mid.setToggleState(false, juce::dontSendNotification);
+        side.setToggleState(false, juce::dontSendNotification);
+        left2Mono.setToggleState(false, juce::dontSendNotification);
+        right2Mono.setToggleState(false, juce::dontSendNotification);
     }
 
-    void timerCallback() override
-    {
-      repaint();
+    void midPaint(){
+        stereo.setToggleState(false, juce::dontSendNotification);
+        mid.setToggleState(true, juce::dontSendNotification);
+        side.setToggleState(false, juce::dontSendNotification);
+        left2Mono.setToggleState(false, juce::dontSendNotification);
+        right2Mono.setToggleState(false, juce::dontSendNotification);
     }
+
+    void sidePaint(){
+        stereo.setToggleState(false, juce::dontSendNotification);
+        mid.setToggleState(false, juce::dontSendNotification);
+        side.setToggleState(true, juce::dontSendNotification);
+        left2Mono.setToggleState(false, juce::dontSendNotification);
+        right2Mono.setToggleState(false, juce::dontSendNotification);
+    }
+
+    void left2MonoPaint(){
+        stereo.setToggleState(false, juce::dontSendNotification);
+        mid.setToggleState(false, juce::dontSendNotification);
+        side.setToggleState(false, juce::dontSendNotification);
+        left2Mono.setToggleState(true, juce::dontSendNotification);
+        right2Mono.setToggleState(false, juce::dontSendNotification);
+    }
+
+    void right2MonoPaint(){
+        stereo.setToggleState(false, juce::dontSendNotification);
+        mid.setToggleState(false, juce::dontSendNotification);
+        side.setToggleState(false, juce::dontSendNotification);
+        left2Mono.setToggleState(false, juce::dontSendNotification);
+        right2Mono.setToggleState(true, juce::dontSendNotification);
+    }
+
+    /* void timerCallback() final {
+        DBG(audioProcessor.apvts.getParameter("stereoMidSide")->getValue());
+    } */
+
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -71,10 +68,11 @@ private:
     MidSiderAudioProcessor& audioProcessor;
 
     juce::TextButton stereo, mid, side, left2Mono, right2Mono;
-    //juce::Label stereoLabel, midLabel, sideLabel, left2MonoLabel, right2MonoLabel;
 
     juce::ToggleButton bypassToggle;
     juce::Label bypassLabel;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassToggleAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MidSiderAudioProcessorEditor)
 };
