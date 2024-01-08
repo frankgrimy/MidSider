@@ -10,6 +10,7 @@ juce_add_plugin(${PROJECT_NAME}
     PLUGIN_CODE Mdsd
     FORMATS VST3
     PRODUCT_NAME "MidSider"
+    BUNDLE_ID com.frankgrimy.midsider
 )
 
 target_sources(${PROJECT_NAME}
@@ -36,5 +37,6 @@ target_compile_definitions(${PROJECT_NAME}
     PUBLIC
         JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
-        JUCE_VST3_CAN_REPLACE_VST2=0    
+        JUCE_VST3_CAN_REPLACE_VST2=0
+        JUCE_DISPLAY_SPLASH_SCREEN=0    
 )
