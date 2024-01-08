@@ -3,3 +3,4 @@ JuceLibraryCode
 .vscode
 build/
 libs/
+copyplugin.ps1
