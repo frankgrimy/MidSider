@@ -21,5 +21,3 @@ else()
 endif()
 
 add_subdirectory(plugin)
-
-
