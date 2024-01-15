@@ -8,7 +8,7 @@ juce_add_plugin(${PROJECT_NAME}
     NEEDS_MIDI_OUTPUT FALSE
     PLUGIN_MANUFACTURER_CODE Frgm
     PLUGIN_CODE Mdsd
-    FORMATS VST3
+    FORMATS VST3# Standalone
     PRODUCT_NAME "MidSider"
     BUNDLE_ID com.frankgrimy.midsider
 )
